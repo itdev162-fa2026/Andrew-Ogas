@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net9.0": {}
+    "net9.0": {
+      "domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/domain.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "domain/1.0.0": {
+      "type": "project",
+      "path": "../Domain/domain.csproj",
+      "msbuildProject": "../Domain/domain.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net9.0": []
+    "net9.0": [
+      "domain >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Andrew\\.nuget\\packages\\": {},
@@ -38,7 +57,11 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Andrew\\Documents\\Class_Files_2025-Fall\\ITDEV-162\\Repos\\Andrew-Ogas\\Domain\\domain.csproj": {
+              "projectPath": "C:\\Users\\Andrew\\Documents\\Class_Files_2025-Fall\\ITDEV-162\\Repos\\Andrew-Ogas\\Domain\\domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
