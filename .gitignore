@@ -3,6 +3,15 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# Development settings with secrets
+appsettings.Development.json
+API/appsettings.Development.json
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
 # dotenv files
 .env
 
