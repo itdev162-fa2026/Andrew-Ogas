@@ -1,6 +1,11 @@
+using Stripe;
 using Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Stripe API key
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 //add CORS Service
 builder.Services.AddCors(options =>
