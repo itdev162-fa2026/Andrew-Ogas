@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createOrder } from "../../services/api";
+import { createCheckoutSession } from "../../services/api";
 import "./Checkout.css";
 
 function Checkout({ cartItems, cartTotal, clearCart }) {
@@ -12,7 +12,7 @@ function Checkout({ cartItems, cartTotal, clearCart }) {
     // Handle empty cart
     if (!cartItems || cartItems.length === 0) {
         return (
-            <div className="checkout-cart">
+            <div className="checkout-container">
                 <div className="empty-cart">
                     <h2>Your cart is empty</h2>
                     <p>Add some products before checking out.</p>
@@ -30,24 +30,31 @@ function Checkout({ cartItems, cartTotal, clearCart }) {
         setError(null);
 
         try {
-            // Create order via API
-            const order = await createOrder(email, cartItems);
+            // Create checkout session in backend
+            const { url } = await createCheckoutSession(email, cartItems);
 
-            // Clear cart from localStorage
-            clearCart();
+            if(!url){
+                throw new Error("No checkout URL recieved from server");
+            }
 
-            // Navigate to success page with order ID
-            navigate(`/order/success?orderId=${order.id}`);
+            // Redirect to Stripe checkout using the URL
+            window.location.href = url;
+
+            // Note: If redirect succeeds, user will leave this page
+            // Cart will be cleared on the success page after payment
         } catch (err) {
-            console.error("Order creation error:", err);
-            setError(err.message || "Failed to create order. Please try again.");
+            console.error("Checkout error:", err);
+            setError(err.message || "Failed to start checkout. Please try again.");
             setLoading(false);
         }
     };
 
     return (
         <div className="checkout-container">
-            <div className="checkout-container">
+            <button onClick={() => navigate("/")} className="checkout-back-button">
+                ← Continue Shopping
+            </button>
+            <div className="checkout-content">
                 <div className="order-summary">
                     <h2>Order Summary</h2>
                     <div className="summary-items">
@@ -84,6 +91,9 @@ function Checkout({ cartItems, cartTotal, clearCart }) {
                         <span>Total:</span>
                         <span className="total-amount">${cartTotal.toFixed(2)}</span>
                     </div>
+                    <button onClick={clearCart} className="clear-cart-checkout">
+                        Clear Cart
+                    </button>
                 </div>
 
                 <div className="checkout-form-section">
@@ -112,11 +122,11 @@ function Checkout({ cartItems, cartTotal, clearCart }) {
                             className="checkout-button"
                             disabled={loading}
                         >
-                            {loading ? "Processing..." : "Place Order"}
+                            {loading ? "Redirecting to payment..." : "Proceed to Payment"}
                         </button>
-                            💡 Note: In Activity 11, we'll add Stripe payment processing to
-                            this checkout flow.
-                        <p className="next-activity-note">
+                            
+                        <p className="secure-notice">
+                            🔒 Secure payment powered by Stripe
                         </p>
                     </form>
                 </div>
