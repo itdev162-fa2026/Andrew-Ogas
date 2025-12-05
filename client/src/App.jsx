@@ -6,11 +6,15 @@ import CartButton from "./components/Cart/CartButton";
 import Cart from "./components/Cart/Cart";
 import Checkout from "./components/Checkout/Checkout";
 import OrderSuccess from "./components/Checkout/OrderSuccess";
+import CheckoutCancelled from "./components/Checkout/CheckoutCancelled";
 import './App.css';
 
 function App() {
   // Cart State
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    return JSON.parse(localStorage.getItem("cart")) || []
+  });
+  
   const [showCart, setShowCart] = useState(false);
 
   // Load cart from localStorage on mount
@@ -130,6 +134,7 @@ function App() {
                 }
               />
               <Route path="/order/success" element={<OrderSuccess />} />
+              <Route path="/checkout/cancelled" element={<CheckoutCancelled />} />
           </Routes>
         </main>
 
